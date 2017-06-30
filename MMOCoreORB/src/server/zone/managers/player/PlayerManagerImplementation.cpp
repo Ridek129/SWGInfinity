@@ -1272,7 +1272,7 @@ void PlayerManagerImplementation::disseminateExperience(TangibleObject* destruct
 				if (xpType != "jedi_general")
 					combatXp += xpAmount;
 				else
-					xpAmount *= 0.2f;
+					xpAmount *= 0.5f;
 
 				//Award individual expType
 				awardExperience(attacker, xpType, xpAmount);
