@@ -632,7 +632,7 @@ uint8 PlayerManagerImplementation::calculateIncapacitationTimer(CreatureObject* 
 	uint32 recoveryTime = (value / 5); //In seconds - 3 seconds is recoveryEvent timer
 
 	//Recovery time is gated between 10 and 60 seconds.
-	recoveryTime = Math::min(Math::max(recoveryTime, 10u), 60u);
+	recoveryTime = Math::min(Math::max(recoveryTime, 10u), 30u);
 
 	//Check for incap recovery food buff - overrides recovery time gate.
 	/*if (hasBuff(BuffCRC::FOOD_INCAP_RECOVERY)) {
@@ -990,8 +990,7 @@ void PlayerManagerImplementation::sendPlayerToCloner(CreatureObject* player, uin
 
 	if (cellID != 0) {
 		BuildingObject* cloningBuilding = cloner.castTo<BuildingObject*>();
-
-		if (cloningBuilding == NULL)  {
+18		if (cloningBuilding == NULL)  {
 			error("Cloning building is null");
 			return;
 		}
@@ -1017,10 +1016,10 @@ void PlayerManagerImplementation::sendPlayerToCloner(CreatureObject* player, uin
 	ManagedReference<SceneObject*> preDesignatedFacility = server->getObject(preDesignatedFacilityOid);
 
 	if (preDesignatedFacility == NULL || preDesignatedFacility != cloner) {
-		player->addWounds(CreatureAttribute::HEALTH, 100, true, false);
-		player->addWounds(CreatureAttribute::ACTION, 100, true, false);
-		player->addWounds(CreatureAttribute::MIND, 100, true, false);
-		player->addShockWounds(100, true);
+		player->addWounds(CreatureAttribute::HEALTH, 274, true, false);
+		player->addWounds(CreatureAttribute::ACTION, 283, true, false);
+		player->addWounds(CreatureAttribute::MIND, 199, true, false);
+		player->addShockWounds(300, true);
 	}
 
 	if (player->getFactionStatus() != FactionStatus::ONLEAVE && cbot->getFacilityType() != CloningBuildingObjectTemplate::FACTION_IMPERIAL && cbot->getFacilityType() != CloningBuildingObjectTemplate::FACTION_REBEL && !player->hasSkill("force_title_jedi_rank_03"))
@@ -1045,14 +1044,14 @@ void PlayerManagerImplementation::sendPlayerToCloner(CreatureObject* player, uin
 				Locker clocker(obj, player);
 
 				if (obj->getOptionsBitmask() & OptionBitmask::INSURED) {
-					//1% Decay for insured items
-					obj->inflictDamage(obj, 0, 0.01 * obj->getMaxCondition(), true, true);
+					//0.8% Decay for insured items
+					obj->inflictDamage(obj, 0, 0.008 * obj->getMaxCondition(), true, true);
 					//Set uninsured
 					uint32 bitmask = obj->getOptionsBitmask() - OptionBitmask::INSURED;
 					obj->setOptionsBitmask(bitmask);
 				} else {
-					//5% Decay for uninsured items
-					obj->inflictDamage(obj, 0, 0.05 * obj->getMaxCondition(), true, true);
+					//8% Decay for uninsured items
+					obj->inflictDamage(obj, 0, 0.08 * obj->getMaxCondition(), true, true);
 				}
 
 				// Calculate condition percentage for decay report
